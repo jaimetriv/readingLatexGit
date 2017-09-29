@@ -1,0 +1,96 @@
+\documentclass[12pt]{article}
+\usepackage{lmodern}
+\usepackage{fontenc}
+\usepackage[british,UKenglish,USenglish,english,american]{babel}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{amssymb, amsmath, amsbsy}
+
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage[right=2cm,left=3cm,top=2cm,bottom=2cm,headsep=0cm,footskip=0.5cm]{geometry}
+\usepackage{parskip}
+
+\title{Reading notes on Introduction to Hybrid Dynamical Systems (HDS) Book - Arjan van der Shaft}
+
+\author{@jaimetriv}
+
+\begin{document}
+\maketitle
+
+
+\section{Chapter 1}
+\subsection{Introduction}
+The area of hybrid systems is still in very early years stage, so it needs time to evolve and gain more maturity.The term hybrid is too wide, so any type of dynamical system can fit into the definition.\par
+An initial definition from van der Shaft related to HDS would be "Hybrid systems are mixture of real-time (continuous) dynamics and discrete events" Particularly, the interaction between these components, continuous and discrete, make changes in trajectories in response to discrete and instantaneous changes. Moreover, the changes can be described by means of difference or differential equations.\par
+Embedded systems and verification are key areas from the computer science approach to HDS.\par
+From Modelling and Simulation approach, they use hybrid systems to interpret physical systems that have multiple operation modes. Specifically, the change between modes of operations is interpreted as an instantaneous change or a discrete transition, due to the change of modes occurs much faster that the changes involved in the dynamic within the mode.\par
+From the Systems and Control community, there are several applications to HDS. Therefore, we can find hierarchical systems with a discrete decision layer and a continuous implementation layer.\par
+According to van der Shaft, from a system-theoretic point of view, HDS have two types of ports. One kind of ports deals with the data flow, and the variables on this channel are symbolic in nature. This port is some form of communication port. On the other hand, we have physical ports, that deals with analog  information that comes from real physical systems. The variables in the ports are continuous in nature, but there are some examples were this can be discrete-time signals also (these are derive from a sampling a continuous-time signal).\par
+
+\subsubsection{Continuous and symbolic dynamics}
+
+\textbf{Definition 1.2.1 Continuous-time state-space models}
+
+\begin{quote}
+"A continuous- time state-space system is described by de the set of state variable x taking values in Rn (or, more generally, in an n-dimensional state space manifold X), and a set of external variables w taking values in Rq, related by a mixed set of differential and algebraic equations"
+\end{quote}
+
+
+\textbf{Definition 1.2.2 Finite automaton}
+\begin{quotation}
+"A finite automaton is described by a triple (L,A,E). Here L is a finite set called the state space, A is a finite set called alphabet whose elements are called symbols. E is the transition rule; it is a subset of LxAxL and its elements are called edges (or transitions or events)"
+\end{quotation}
+
+\subsubsection{Hybrid automaton}
+
+\textbf{Definition 1.2.3 Hybrid automaton}
+\begin{quote}
+	``A hybrid automaton is described by a septuple $(L,X,A,W,E,Inv, Act)$ where the symbols have the following meaning:
+	
+\begin{itemize}
+	\item $L$ is a finite set, called the set of discrete states or locations. They are the \emph{vertices} of the graph.
+	\item $X$ is the continuous state space of the hybrid automaton in which the continuous state variables $x$ take their values. For our purposes $X  \mathbf{R}^n$ or X is an n-dimensional manifold.
+	\item A is a finite set of symbols which serve to label the edges.
+	\item W=Rq is the continuous communication space in which the continuous external variables w take their values.
+	\item E is a finite set of edges called transitions (or events). Every edge is defined by a five-tuple(l,a, Guardll', Jumpll',l'), where l and l' are in L, a is in A, Guardll' is the subset of X and Jumpll' is a relation defined by a subset XxX. The transition from the discrete l to l' is enabled when the continuous state x is in the Guardll', while during the transition the continuous state x jumps to x' given by the relation (x,x') in Jumpll'.
+	\item Inv is a mapping from the locations L to the set of subsets of X, that is Inv(l) is subset of X for all l in L. Whenever the system is at location l, the continuous state x must satisfy x in Inv(l). The subset Inv(l) for l in L is called the location invariant of location l.
+	\item Act is a mapping that assigns to each location l in L a set of differential-algebraic equations Fl, relating the continuous state variables x with their time-derivatives xdot and the continuous external variables w: Fl(x, xdot, w)=0. The solutions of these differential-algebraic equations are called activities of the location trajectory of the hybrid automaton (run or execution for CS).
+\end{itemize}
+	
+	A continuous trajectory (l, delta, x , w) associated with location l consist of nonnegative time delta (the duration of the continuous trajectory), a piecewise continuous function w:[0,delta] to W, and continuous and piecewise differentiable function x:[0,delta] to X such that: x(t) in Inv(l) for all t in (0,delta), Fl(x(t), xdot(t), w(t))=0 for all t in (0,delta)''
+\end{quote}
+
+\textbf{Definition 1.2.5 Generalized hybrid automaton}
+\begin{quote}
+"A generalized hybrid automaton is described by a sixtuple (L,X,A,W,R,Act) where L,X,A,W and Act are as in Definition 1.2.3, and R is a subset of (LxX)x(AxW)x(LxX). A continuous trajectory (l,a,delta,x,w) associated with a location l and a discrete external symbol a consist of a nonnegative time delta, a piecewise continuous function w:[0,delta] to W, and a continuous and piecewise differentiable function x:[0,delta] to X such that:
+(l,x(t),a,w(t),l,x(t)) in R for all t in (0,delta),
+Fl(x(t),xdot(t),w(t))=0 for almost all t in (0,delta)(exceptions include the points of discontinuity of w).
+A trajectory of the generalized hybrid automaton is an (infinite) sequence
+(l0,a0,delta0,x0,w0) to (l1,a1,delta1,x1,w1) to (l2,a2,delta2,x2,w2)...
+such that at event times
+t0=delta0, t1=delta0+delta1, t2=delta0+delta1+delta2,...
+the following relation hold
+(lj,xj(tj),aj,wj(tj),lj+1,xj+1(tj)) in R, for all j=0,1,2...
+The subset R incorporates the notions of the locations invariants, guards, and jumps of definition 1.2.3 in the following way.
+Inv(l)={(x,a,w) in XxAxW | (l,x,a,w,l,x) in R}
+Furthermore, given two locations l,l' we obtain the following guard for the transition from l to l':
+Guardll'={(x,a,w) in XxAxW | Exists x' in X, (l,x,a,w,l',x') in R},
+with the interpretation that the transition from l to l' can take place if and only if (x,a,w) in Guardll'. Finally the associated jump relation is given by
+Jumpll'(x,a,w)={x' in X | (l,x,a,w,l',x') in R}"
+\end{quote}
+\section{Chapter 2}
+\section{Chapter 3}
+
+
+
+\clearpage
+\bibliographystyle{plain}
+\bibliography{reference}
+
+\end{document}
